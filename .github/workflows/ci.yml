@@ -30,5 +30,6 @@ jobs:
     name: Deploy
     needs: test           # runs only if Test succeeds
     runs-on: ubuntu-latest
+    environment: production   # pauses here until a reviewer approves
     steps:
       - run: echo "Deploying application... done"

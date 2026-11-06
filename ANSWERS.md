@@ -9,12 +9,16 @@ Workflow: a small Go application.
 | Code development | Manual | A developer writes and fixes the code. |
 | Build | Automated | `go build` runs by itself on every push. |
 | Testing | Automated | `go test` runs by itself after a successful build. |
-| Approval / review of failures | Partially automated | The tool reports pass/fail, but a human decides what to fix. |
+| Approval (release) | Partially automated | GitHub pauses the pipeline and waits; a human clicks Approve, then deployment continues automatically. |
 | Deployment | Automated | Runs automatically only if tests pass. |
 
 ## Task 2 – Pipeline
 File: `.github/workflows/ci.yml`, name `CI-Pipeline-<UNIVERSITY ID>`.
-Stages: Build → Test → Deploy. In the GitHub **Actions** tab each stage shows its status and logs.
+Stages: Build → Test → (Manual Approval) → Deploy. In the GitHub **Actions** tab each stage shows its status and logs.
+
+### Enabling the approval gate (one-time setup)
+Repo → Settings → Environments → New environment → name it `production` → tick **Required reviewers** → add yourself → Save.
+Note: required reviewers work on public repos (free plan); private repos need a paid plan.
 
 ## Task 3 – Pipeline Behavior
 1. **Success run:** push the code. Build, Test and Deploy are all green.
@@ -27,7 +31,7 @@ Stages: Build → Test → Deploy. In the GitHub **Actions** tab each stage show
 ## Task 4 – BPMN
 File: `workflow.bpmn` (open it at https://demo.bpmn.io → "Open").
 Start → Write/Fix Code (User task) → Build (Service task) → Run Tests (Service task) → Gateway "Build and tests passed?"
-- Yes → Deploy (Service task) → End
+- Yes → Approve Release (User task) → Deploy (Service task) → End
 - No → Review Logs and Correct (User task) → back to Write/Fix Code
 
 ## Task 5 – Pipeline ↔ BPMN
@@ -36,6 +40,7 @@ Start → Write/Fix Code (User task) → Build (Service task) → Run Tests (Ser
 | Build (service task) | `build` job |
 | Run Tests (service task) | `test` job |
 | Gateway (passed?) | Success/failure of the `test` job |
+| Approve Release (user task) | `production` environment approval gate on the `deploy` job |
 | Deploy (service task) | `deploy` job |
 | Write/Fix Code, Review Logs (user tasks) | Developer work outside the pipeline |
 
