@@ -1,5 +1,4 @@
-# CHANGE 20XXXXXXX to your real university ID
-name: CI-Pipeline-20XXXXXXX
+name: CI-Pipeline-202303334
 
 on:
   push:
