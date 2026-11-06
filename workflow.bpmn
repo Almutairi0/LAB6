@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Defs" targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="CI_CD" isExecutable="false">
+    <bpmn:startEvent id="Start" name="Start"><bpmn:outgoing>f1</bpmn:outgoing></bpmn:startEvent>
+    <bpmn:userTask id="Code" name="Write / Fix Code"><bpmn:incoming>f1</bpmn:incoming><bpmn:incoming>f8</bpmn:incoming><bpmn:outgoing>f2</bpmn:outgoing></bpmn:userTask>
+    <bpmn:serviceTask id="Build" name="Build"><bpmn:incoming>f2</bpmn:incoming><bpmn:outgoing>f3</bpmn:outgoing></bpmn:serviceTask>
+    <bpmn:serviceTask id="Test" name="Run Tests"><bpmn:incoming>f3</bpmn:incoming><bpmn:outgoing>f4</bpmn:outgoing></bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="GW" name="Build and tests passed?"><bpmn:incoming>f4</bpmn:incoming><bpmn:outgoing>f5</bpmn:outgoing><bpmn:outgoing>f7</bpmn:outgoing></bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Deploy" name="Deploy"><bpmn:incoming>f5</bpmn:incoming><bpmn:outgoing>f6</bpmn:outgoing></bpmn:serviceTask>
+    <bpmn:endEvent id="End" name="Released"><bpmn:incoming>f6</bpmn:incoming></bpmn:endEvent>
+    <bpmn:userTask id="Review" name="Review Logs and Correct"><bpmn:incoming>f7</bpmn:incoming><bpmn:outgoing>f8</bpmn:outgoing></bpmn:userTask>
+    <bpmn:sequenceFlow id="f1" sourceRef="Start" targetRef="Code"/>
+    <bpmn:sequenceFlow id="f2" sourceRef="Code" targetRef="Build"/>
+    <bpmn:sequenceFlow id="f3" sourceRef="Build" targetRef="Test"/>
+    <bpmn:sequenceFlow id="f4" sourceRef="Test" targetRef="GW"/>
+    <bpmn:sequenceFlow id="f5" name="Yes" sourceRef="GW" targetRef="Deploy"/>
+    <bpmn:sequenceFlow id="f6" sourceRef="Deploy" targetRef="End"/>
+    <bpmn:sequenceFlow id="f7" name="No" sourceRef="GW" targetRef="Review"/>
+    <bpmn:sequenceFlow id="f8" sourceRef="Review" targetRef="Code"/>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="D">
+    <bpmndi:BPMNPlane id="P" bpmnElement="CI_CD">
+      <bpmndi:BPMNShape id="s_Start" bpmnElement="Start"><dc:Bounds x="152" y="182" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="157" y="225" width="26" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_Code" bpmnElement="Code"><dc:Bounds x="240" y="160" width="100" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_Build" bpmnElement="Build"><dc:Bounds x="390" y="160" width="100" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_Test" bpmnElement="Test"><dc:Bounds x="540" y="160" width="100" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_GW" bpmnElement="GW" isMarkerVisible="true"><dc:Bounds x="695" y="175" width="50" height="50"/><bpmndi:BPMNLabel><dc:Bounds x="676" y="130" width="88" height="27"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_Deploy" bpmnElement="Deploy"><dc:Bounds x="800" y="160" width="100" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_End" bpmnElement="End"><dc:Bounds x="962" y="182" width="36" height="36"/><bpmndi:BPMNLabel><dc:Bounds x="953" y="225" width="54" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="s_Review" bpmnElement="Review"><dc:Bounds x="670" y="300" width="100" height="80"/></bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="e1" bpmnElement="f1"><di:waypoint x="188" y="200"/><di:waypoint x="240" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e2" bpmnElement="f2"><di:waypoint x="340" y="200"/><di:waypoint x="390" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e3" bpmnElement="f3"><di:waypoint x="490" y="200"/><di:waypoint x="540" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e4" bpmnElement="f4"><di:waypoint x="640" y="200"/><di:waypoint x="695" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e5" bpmnElement="f5"><di:waypoint x="745" y="200"/><di:waypoint x="800" y="200"/><bpmndi:BPMNLabel><dc:Bounds x="763" y="182" width="18" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e6" bpmnElement="f6"><di:waypoint x="900" y="200"/><di:waypoint x="962" y="200"/></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e7" bpmnElement="f7"><di:waypoint x="720" y="225"/><di:waypoint x="720" y="300"/><bpmndi:BPMNLabel><dc:Bounds x="728" y="255" width="15" height="14"/></bpmndi:BPMNLabel></bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="e8" bpmnElement="f8"><di:waypoint x="670" y="340"/><di:waypoint x="290" y="340"/><di:waypoint x="290" y="240"/></bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
